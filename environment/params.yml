@@ -1,0 +1,78 @@
+default:
+  vertical: gbl
+  service: users
+  process: sms
+  dashboard: 58j-iub-73p
+  project: sms
+  #aws
+  aws-bucket-name: gbl-core-serverless
+  aws-bucket-kms-key: ${env:AWS_BUCKET_KMS_KEY, 'alias/aws/s3'}
+  aws-lambda-kms-key-arn: ${env:AWS_LAMBDA_KMS_KEY, 'arn:aws:kms:us-east-1:999999999999:key/dummy'}
+  aws-api-key-name: ${param:environment}-gbl-core-users
+  aws-api-key-value: ${ssm:/aws/reference/secretsmanager/${env:SECRET_MANAGER_USERS}}
+  aws-tracing-apigateway: false
+  aws-tracing-lambda: false
+  aws-version-function: false
+  aws-region: us-east-1
+  aws-policy-lambda-exec: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+  aws-policy-lambda-decrypt: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-${param:vertical}-core-lambda-decrypt'
+  aws-policy-sms-ssm: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-${param:vertical}-sms-readonly_sysman'
+  aws-policy-secrets-manager: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-gbl-core-users-secrets_manager-access'
+  aws-policy-stage-machine-enrollment-created-sns: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-gbl-core-stage_machine-enrollment_created'
+  aws-policy-stage-machine-enrollments-created-sns: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-gbl-core-stage_machine-enrollments_created'
+  aws-policy-vpc-attachment: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:policy/${param:environment}-${param:vertical}-core-lambda-vpc-attachment'  
+  #datadog
+  datadog-enabled: false
+  datadog-log-level: error
+  #rds
+  database-debug: false
+  database-migrate: false
+  database-host: ${ssm:/${param:environment}/sms/gbl/users/rds/database/host, 'default'}
+  database-port: ${ssm:/${param:environment}/sms/gbl/users/rds/database/port, 'default'}
+  database-name: ${ssm:/${param:environment}/sms/gbl/users/rds/database/name, 'default'}
+  database-user: ${ssm:/${param:environment}/sms/gbl/users/rds/database/user, 'default'}
+  database-password: ${ssm:/${param:environment}/sms/gbl/users/rds/database/password, 'default'}
+  secret-manager-users: ${env:SECRET_MANAGER_USERS}
+  #sentry
+  sentry-enabled: true
+  sentry-dsn:
+  #authorizer
+  authorizer-arn: 'arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT, 99999}:function:authorizer-${param:environment}-authorizer-lambda'
+  #k8s-worker
+  k8s-worker-role: 'arn:aws:iam::${env:AWS_ACCOUNT, 99999}:role/workers'
+  #private-apis
+  private: false
+prod:
+  environment: prod
+  #aws
+  aws-tracing-apigateway: true
+  aws-log-retention: 30
+  #datadog
+  datadog-enabled: true
+qa:
+  environment: qa
+  #aws
+  aws-tracing-apigateway: true
+  aws-log-retention: 7
+  #datadog
+  datadog-enabled: true
+local:
+  environment: local
+  #aws  
+  aws-log-retention: 7
+  aws-bucket-kms-key: alias/aws/s3
+  aws-lambda-kms-key-arn: arn:aws:kms:us-east-1:000000:key/000000
+  aws-api-key-name: local_api_key
+  secret-manager-users: 'local_secret_manager_users'
+  aws-api-key-value: local_api_key_value
+  #sentry
+  sentry-enabled: false
+  sentry-dsn: test
+  #rds
+  database-host: "172.17.0.1"
+  database-port: 3317
+  database-name: users
+  database-user: root
+  database-password: root
+  database-migrate: false
+  database-debug: true
