@@ -1,0 +1,48 @@
+name: aws
+runtime: provided.al2
+architecture: arm64
+lambdaHashingVersion: '20201221'
+stage: ${opt:stage,'local'}
+region: ${param:aws-region}
+environment: ${file(./environment/env.yml)}
+versionFunctions: ${param:aws-version-function}
+iam:
+  role:
+    name: ${env:ENVIRONMENT}-${param:vertical}-${param:process}-${param:service}-role
+    managedPolicies:
+      - ${param:aws-policy-lambda-exec}
+      - ${param:aws-policy-lambda-decrypt}
+      - ${param:aws-policy-sms-ssm}
+      - ${param:aws-policy-secrets-manager}
+      - ${param:aws-policy-vpc-attachment}
+    tags:
+      env: ${param:environment}
+      service: ${param:service}
+      process: ${param:process}
+deploymentPrefix: students
+deploymentBucket:
+  name: ${param:environment}-${param:aws-bucket-name}
+  blockPublicAccess: true
+  serverSideEncryption: aws:kms
+  sseKMSKeyId: ${param:aws-bucket-kms-key}
+  skipPolicySetup: true
+  maxPreviousDeploymentArtifacts: 3  
+kmsKeyArn: ${param:aws-lambda-kms-key-arn}
+logRetentionInDays: ${param:aws-log-retention}
+tracing: 
+  apiGateway: ${param:aws-tracing-apigateway}
+  lambda: ${param:aws-tracing-lambda}  
+apiGateway:
+  apiKeys:
+    - name: ${param:aws-api-key-name}
+      value: ${param:aws-api-key-value}
+vpc:
+  securityGroupIds:
+    - ${env:AWS_SG_ID, 'default-sg'}
+  subnetIds:
+    - ${env:AWS_SUBNET_1, 'default-snet1'}
+    - ${env:AWS_SUBNET_2, 'default-snet2'}
+    - ${env:AWS_SUBNET_3, 'default-snet3'}
+stackTags:
+  env: ${param:environment}
+  service: ${param:service}

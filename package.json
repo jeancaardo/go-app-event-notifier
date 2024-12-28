@@ -1,0 +1,12 @@
+{
+  "name": "users.git",
+  "version": "1.0.0",
+  "description": "Users project",
+  "devDependencies": {
+    "serverless": "3.32.2",
+    "serverless-offline": "github:sfosterDH/serverless-offline",
+    "serverless-offline-ssm": "6.2.0",
+    "serverless-offline-local-authorizers-plugin": "^1.2.0",
+    "serverless-plugin-datadog": "5.57.1"
+  }
+}

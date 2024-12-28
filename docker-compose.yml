@@ -1,0 +1,25 @@
+version: "3.5"
+services:
+  mysql:
+    platform: linux/amd64
+    container_name: events-mysql
+    build:
+      context: ./.dockers/mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: events
+    ports:
+      - "3317:3306"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ./.dockers/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - appnet
+networks:
+  appnet:
+    driver: "bridge"
