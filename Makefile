@@ -13,8 +13,18 @@ install:
 build:
 	@echo "=> Building service"
 	@git config --local core.hooksPath .githooks/
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-store/bootstrap					cmd/users/store/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-get/bootstrap						cmd/users/get/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-getall/bootstrap					cmd/users/get-all/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-update/bootstrap					cmd/users/update/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-delete/bootstrap					cmd/users/delete/main.go
 
 	@echo "=> Zipping binaries"
+	zip -j bin/users-store.zip bin/users-store/bootstrap
+	zip -j bin/users-get.zip bin/users-get/bootstrap
+	zip -j bin/users-getall.zip bin/users-getall/bootstrap
+	zip -j bin/users-update.zip bin/users-update/bootstrap
+	zip -j bin/users-delete.zip bin/users-delete/bootstrap
 
 .PHONY: format
 format:
@@ -26,7 +36,7 @@ start:
 	@docker compose up -d
 	@make format
 	@make build
-	@npx sls offline local-authorizers
+	@sls offline
 
 .PHONY: test
 test:
