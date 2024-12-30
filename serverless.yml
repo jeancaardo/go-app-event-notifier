@@ -1,0 +1,119 @@
+service: event-notifier
+
+frameworkVersion: '3.32.2'
+
+useDotenv: true
+
+params: ${file(./environment/params.yml)}
+
+provider: ${file(./environment/provider.yml)}
+
+plugins:
+  - serverless-plugin-datadog
+  - serverless-offline
+  - serverless-offline-ssm
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 4002
+    websocketPort: 3002
+    lambdaPort: 3102
+    useDocker: true
+    dockerHost: 0.0.0.0
+    dockerNetwork: go-app-event-notifier_appnet
+    noPrependStageInUrl: true
+    prefix: event-notifier
+    noTimeout: true
+  serverless-offline-sns:
+    host: 0.0.0.0 # Enable plugin to listen on every local address
+    sns-subscribe-endpoint: host.docker.internal #Host ip address
+    sns-endpoint: http://127.0.0.1:4566 # Default localstack sns endpoint
+    port: 4102
+    debug: true
+  datadog: ${file(./environment/datadog.yml)}
+  cors: ${file(./environment/cors.yml)}
+  serverless-offline-ssm:
+    stages:
+      - local
+    ssm:
+      '/local/pg/gbl/course/rds/mysql/db-host': ${env:DATABASE_HOST, 'dummy'}
+      '/local/pg/gbl/course/rds/mysql/db-port': ${env:DATABASE_PORT, 'dummy'}
+      '/local/pg/gbl/course/rds/mysql/db-name': ${env:DATABASE_NAME, 'dummy'}
+      '/local/pg/gbl/course/rds/mysql/db-user': ${env:DATABASE_USER, 'dummy'}
+      '/local/pg/gbl/course/rds/mysql/db-password': ${env:DATABASE_PASSWORD, 'dummy'}      
+
+package:
+  individually: true
+  patterns:
+    - '!./.git/**'
+    - '!./.serverless/**'
+    - '!./node_modules/**'
+    - '!./pkg/**'
+    - '!./bootstrap/**'
+    - '!./cmd/**'
+    - '!./.dockers/**'
+    - '!./.githooks/**'
+    - '!./bin/**'
+
+functions:
+  user-store:
+    description: Save a user
+    handler: bootstrap
+    timeout: 30
+    events:
+      - http:
+          path: /users/
+          method: post
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/users-store.zip'
+
+  users-get:
+    description: Get a user, filter by ID
+    handler: bootstrap
+    events:
+      - http:
+          path: /users/{id}
+          method: get
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/users-get.zip'
+
+  users-getall:
+    description: Get all users
+    handler: bootstrap
+    events:
+      - http:
+          path: /users/
+          method: get
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/users-getall.zip'
+
+  users-update:
+    description: Update all attibutes in a user
+    handler: bootstrap
+    events:
+      - http:
+          path: /users/{id}
+          method: put
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/users-update.zip'
+
+  users-delete:
+    description: Delete a user
+    handler: bootstrap
+    events:
+      - http:
+          path: /users/{id}
+          method: delete
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/users-delete.zip'

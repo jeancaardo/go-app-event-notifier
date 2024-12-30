@@ -9,7 +9,6 @@ default:
   aws-bucket-kms-key: ${env:AWS_BUCKET_KMS_KEY, 'alias/aws/s3'}
   aws-lambda-kms-key-arn: ${env:AWS_LAMBDA_KMS_KEY, 'arn:aws:kms:us-east-1:999999999999:key/dummy'}
   aws-api-key-name: ${param:environment}-gbl-core-users
-  aws-api-key-value: ${ssm:/aws/reference/secretsmanager/${env:SECRET_MANAGER_USERS}}
   aws-tracing-apigateway: false
   aws-tracing-lambda: false
   aws-version-function: false
@@ -27,11 +26,6 @@ default:
   #rds
   database-debug: false
   database-migrate: false
-  database-host: ${ssm:/${param:environment}/sms/gbl/users/rds/database/host, 'default'}
-  database-port: ${ssm:/${param:environment}/sms/gbl/users/rds/database/port, 'default'}
-  database-name: ${ssm:/${param:environment}/sms/gbl/users/rds/database/name, 'default'}
-  database-user: ${ssm:/${param:environment}/sms/gbl/users/rds/database/user, 'default'}
-  database-password: ${ssm:/${param:environment}/sms/gbl/users/rds/database/password, 'default'}
   secret-manager-users: ${env:SECRET_MANAGER_USERS}
   #sentry
   sentry-enabled: true
