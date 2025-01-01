@@ -1,11 +1,10 @@
 package request
 
 import (
+	"github.com/jeancaardo/go-app-event-notifier/pkg/utils/response"
 	"reflect"
 	"strconv"
 	"strings"
-
-	"github.com/digitalhouse-tech/go-lib-kit/response"
 )
 
 func DecodeMap(m map[string]string, s interface{}) error {

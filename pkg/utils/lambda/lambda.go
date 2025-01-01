@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/jeancaardo/go-app-event-notifier/pkg/utils/response"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalhouse-tech/go-lib-kit/response"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport/awslambda"
 	"gorm.io/gorm"
