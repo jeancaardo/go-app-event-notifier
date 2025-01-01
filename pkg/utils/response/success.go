@@ -2,10 +2,9 @@ package response
 
 import (
 	"encoding/json"
+	"github.com/jeancaardo/go-app-event-notifier/pkg/utils/headers"
+	"github.com/jeancaardo/go-app-event-notifier/pkg/utils/meta"
 	"net/http"
-
-	"github.com/digitalhouse-tech/go-lib-kit/headers"
-	"github.com/digitalhouse-tech/go-lib-kit/meta"
 )
 
 type SuccessResponse struct {
