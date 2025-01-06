@@ -18,6 +18,11 @@ build:
 	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-getall/bootstrap					cmd/users/get-all/main.go
 	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-update/bootstrap					cmd/users/update/main.go
 	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/users-delete/bootstrap					cmd/users/delete/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/events-store/bootstrap					cmd/events/store/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/events-get/bootstrap						cmd/events/get/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/events-getall/bootstrap					cmd/events/get-all/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/events-update/bootstrap					cmd/events/update/main.go
+	env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/events-delete/bootstrap					cmd/events/delete/main.go
 
 	@echo "=> Zipping binaries"
 	zip -j bin/users-store.zip bin/users-store/bootstrap
@@ -25,6 +30,11 @@ build:
 	zip -j bin/users-getall.zip bin/users-getall/bootstrap
 	zip -j bin/users-update.zip bin/users-update/bootstrap
 	zip -j bin/users-delete.zip bin/users-delete/bootstrap
+	zip -j bin/events-store.zip bin/events-store/bootstrap
+	zip -j bin/events-get.zip bin/events-get/bootstrap
+	zip -j bin/events-getall.zip bin/events-getall/bootstrap
+	zip -j bin/events-update.zip bin/events-update/bootstrap
+	zip -j bin/events-delete.zip bin/events-delete/bootstrap
 
 .PHONY: format
 format:

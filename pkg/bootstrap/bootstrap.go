@@ -57,6 +57,7 @@ func ConnectLocal() *gorm.DB {
 	}
 	if os.Getenv("DATABASE_MIGRATE") == "true" {
 		_ = db.AutoMigrate(&domain.User{})
+		_ = db.AutoMigrate(&domain.Event{})
 	}
 	return db
 }

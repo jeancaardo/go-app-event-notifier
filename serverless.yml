@@ -117,3 +117,63 @@ functions:
           private: false
     package:
       artifact: './bin/users-delete.zip'
+
+  event-store:
+    description: Save an event
+    handler: bootstrap
+    events:
+      - http:
+          path: /events/
+          method: post
+          cors: ${self:custom.cors}
+          private: false
+    package:
+      artifact: './bin/events-store.zip'
+
+  events-get:
+    description: Get an event, filter by ID
+    handler: bootstrap
+    events:
+      - http:
+          path: /events/{id}
+          method: get
+          cors: ${self:custom.cors}
+          private: false
+    package:
+        artifact: './bin/events-get.zip'
+
+  events-getall:
+    description: Get all events
+    handler: bootstrap
+    events:
+      - http:
+          path: /events/
+          method: get
+          cors: ${self:custom.cors}
+          private: false
+    package:
+        artifact: './bin/events-getall.zip'
+
+  events-update:
+    description: Update all attibutes in an event
+    handler: bootstrap
+    events:
+      - http:
+          path: /events/{id}
+          method: put
+          cors: ${self:custom.cors}
+          private: false
+    package:
+        artifact: './bin/events-update.zip'
+
+  events-delete:
+    description: Delete an event
+    handler: bootstrap
+    events:
+      - http:
+          path: /events/{id}
+          method: delete
+          cors: ${self:custom.cors}
+          private: false
+    package:
+        artifact: './bin/events-delete.zip'
